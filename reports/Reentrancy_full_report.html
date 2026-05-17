@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>Smart Contract Audit — Reentrancy</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',sans-serif;background:#0d1117;color:#c9d1d9;line-height:1.6;}
+  .header{background:linear-gradient(135deg,#161b22,#1c2333);padding:40px;border-bottom:1px solid #30363d;}
+  .header h1{color:#58a6ff;font-size:2rem;}
+  .header p{color:#8b949e;margin-top:8px;}
+  .badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;margin:4px;}
+  .badge-blue{background:#1f4a8a;color:#58a6ff;}
+  .badge-green{background:#1a4731;color:#3fb950;}
+  .badge-red{background:#4a1f1f;color:#f85149;}
+  .container{max-width:1100px;margin:0 auto;padding:40px 20px;}
+  .card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:24px;margin-bottom:24px;}
+  .card h2{color:#58a6ff;border-bottom:1px solid #30363d;padding-bottom:12px;margin-bottom:16px;font-size:1.2rem;}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px;}
+  .stat{background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:20px;text-align:center;}
+  .stat-value{font-size:2rem;font-weight:bold;color:#58a6ff;}
+  .stat-label{font-size:12px;color:#8b949e;margin-top:4px;}
+  table{width:100%;border-collapse:collapse;}
+  th{background:#0d1117;color:#8b949e;padding:10px;text-align:left;font-size:12px;border-bottom:1px solid #30363d;}
+  td{padding:10px;border-bottom:1px solid #21262d;font-size:13px;}
+  tr:hover td{background:#1c2333;}
+  .llm-content{background:#0d1117;border-radius:6px;padding:20px;font-size:14px;white-space:pre-wrap;word-wrap:break-word;}
+  .footer{text-align:center;padding:40px;color:#8b949e;font-size:12px;border-top:1px solid #30363d;}
+  .proved{color:#3fb950;} .violated{color:#f85149;}
+</style>
+</head>
+<body>
+<div class='header'>
+<h1>🔐 Smart Contract Security Audit</h1>
+<p>Contract: <strong>Reentrancy.sol</strong></p>
+<p>Generated: 2026-05-17T05:58:09.531250+00:00</p>
+<p>Audited by: UMBA Consulting Engineers — AI Audit Engine</p>
+<div style='margin-top:16px;'>
+<span class='badge badge-blue'>Slither</span>
+<span class='badge badge-blue'>Mythril</span>
+<span class='badge badge-blue'>Z3 SMT</span>
+<span class='badge badge-green'>LLM Analysis</span>
+</div>
+</div>
+<div class='container'>
+<div class='stats'>
+<div class='stat'><div class='stat-value proved'>10</div><div class='stat-label'>Properties Proved</div></div>
+<div class='stat'><div class='stat-value violated'>3</div><div class='stat-label'>Properties Violated</div></div>
+<div class='stat'><div class='stat-value' style='color:#ffa657;'>13</div><div class='stat-label'>Total Checks</div></div>
+</div>
+<div class='card'>
+<h2>⚙️ Formal Verification Results (Z3 SMT)</h2>
+<table><tr><th>Property</th><th>Status</th><th>Message</th></tr>
+<tr><td>NoOverflow</td><td style="color:#28a745;font-weight:bold;">✅ PROVED</td><td>No overflow: 100 + 200 fits in uint256</td></tr><tr><td>NoOverflow</td><td style="color:#dc3545;font-weight:bold;">❌ VIOLATED</td><td>OVERFLOW: 57896044618658097711785492504343953926634992332820282019728792003956564819968 + 57896044618658097711785492504343953926634992332820282019728792003956564819968 exceeds uint256</td></tr><tr><td>NoUnderflow</td><td style="color:#28a745;font-weight:bold;">✅ PROVED</td><td>No underflow: 100 ≥ 50</td></tr><tr><td>NoUnderflow</td><td style="color:#dc3545;font-weight:bold;">❌ VIOLATED</td><td>UNDERFLOW: 50 &lt; 100</td></tr><tr><td>BalanceConservation</td><td style="color:#28a745;font-weight:bold;">✅ PROVED</td><td>Balance conserved: 100 + 50 - 30 = 120</td></tr><tr><td>BalanceMonotonic</td><td style="color:#28a745;font-weight:bold;">✅ PROVED</td><td>Balance never decreases on deposit</td></tr><tr><td>AccessControl</td><td style="color:#28a745;font-weight:bold;">✅ PROVED</td><td>Access-control formula is sound: non-owners cannot call privileged functions</td></tr><tr><td>RoleSeparation</td><td style="color:#28a745;font-weight:bold;">✅ PROVED</td><td>Role separation holds: non-admin cannot perform admin actions</td></tr><tr><td>WithdrawalLimit</td><td style="color:#28a745;font-weight:bold;">✅ PROVED</td><td>Withdrawal limit holds: 50 ≤ 100</td></tr><tr><td>WithdrawalLimit</td><td style="color:#dc3545;font-weight:bold;">❌ VIOLATED</td><td>UNDERFLOW: withdrawal 100 &gt; balance 50</td></tr><tr><td>TotalSupplyInvariant</td><td style="color:#28a745;font-weight:bold;">✅ PROVED</td><td>Supply invariant holds: 1000 + 500 - 200</td></tr><tr><td>TotalSupplyInvariant</td><td style="color:#28a745;font-weight:bold;">✅ PROVED</td><td>Supply invariant holds: 1000 + 0 - 1200</td></tr><tr><td>FlashLoanInvariant</td><td style="color:#28a745;font-weight:bold;">✅ PROVED</td><td>Flash-loan invariant holds: reserve never decreases after repay</td></tr>
+</table>
+</div>
+<div class='card'>
+<h2>🤖 LLM Vulnerability Analysis</h2>
+<div class='llm-content'>LLM audit not run.</div>
+</div>
+</div>
+<div class='footer'>
+<p>UMBA Smart Contract Formal Verification Suite</p>
+<p>UMBA YANGA IVON EXAUCE | umbaconsulting.com | umbayanga6bio@gmail.com</p>
+</div>
+</body>
+</html>
