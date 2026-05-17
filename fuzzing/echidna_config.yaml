@@ -1,0 +1,16 @@
+# Echidna fuzzer configuration
+# https://github.com/crytic/echidna
+
+testLimit: 50000
+sequenceLength: 100
+shrinkLimit: 5000
+coverage: true
+corpusDir: "corpus"
+format: "text"
+contractAddr: "0x00a329c0648769a73afac7f9381e08fb43dbea72"
+deployer: "0x00a329c0648769a73afac7f9381e08fb43dbea72"
+sender: ["0x1000", "0x2000", "0x3000"]
+psender: "0x1000"
+prefix: "echidna_"
+coverageFormats: ["lcov", "html"]
+cryticArgs: ["--solc-remaps", "@openzeppelin=node_modules/@openzeppelin"]

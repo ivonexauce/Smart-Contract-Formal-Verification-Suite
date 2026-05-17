@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  audit:
+    build: .
+    container_name: smart-contract-audit
+    volumes:
+      - ./contracts:/app/contracts
+      - ./reports:/app/reports
+      - ./fuzzing:/app/fuzzing
+    env_file:
+      - .env
+    command: >
+      python scripts/run_full_audit.py
+      --contract contracts/vulnerable/Reentrancy.sol
+      --output-dir reports
+
+  slither:
+    build: .
+    container_name: slither-analysis
+    volumes:
+      - ./contracts:/app/contracts
+      - ./reports:/app/reports
+    command: >
+      python scripts/run_slither.py
+      --contract contracts/vulnerable/Reentrancy.sol
+      --output reports/slither_output.json
+
+  formal-verify:
+    build: .
+    container_name: formal-verification
+    command: python formal_verification/smt_verifier.py
+
+  tests:
+    build: .
+    container_name: audit-tests
+    command: python -m pytest tests/ -v --tb=short
